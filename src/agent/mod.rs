@@ -545,7 +545,9 @@ impl AgentContext {
                 let readable = events.input() || events.input_and_output();
                 let writable = events.output() || events.input_and_output();
 
-                self.selector.register(socket, readable, writable).unwrap();
+                if let Err(e) = self.selector.register(socket, readable, writable) {
+                    panic!("An error occured while registering socket.Socket: {} (readable: {}, writable: {}),\nError: {}", socket, readable, writable, e)
+                }
             }
         }
 
